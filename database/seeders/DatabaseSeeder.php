@@ -4,8 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Student;
-use App\Models\Classroom;
-
+use App\Models\Guardian; 
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,10 +15,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory(10)->create();
-        Classroom::factory()
-            ->count(4)
-            ->has(Student::factory()->count(5), 'students')
-            ->create();
+        Guardian::factory(10)->create();
 
+    
     }
 }

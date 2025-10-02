@@ -11,9 +11,9 @@ class Classroom extends Model
     /** @use HasFactory<\Database\Factories\ClassroomFactory> */
     use HasFactory;
 
-   public function students()
+   public function classroom()
 {
-    return $this->hasMany(Student::class);
-}
+    return $this->hasMany(Classroom ::class);
+}   
 
 }
