@@ -12,9 +12,11 @@
             <x-nav-link href="/home" :active="request()->is('home')">Home</x-nav-link>
             <x-nav-link href="/profil" :active="request()->is('profil')">Profil</x-nav-link>
             <x-nav-link href="/kontak" :active="request()->is('kontak')">Kontak</x-nav-link>
-            <x-nav-link href="/students" :active="request()->is('students')">students</x-nav-link>
-            <x-nav-link href="/guardians" :active="request()->is('guardians')">guardians</x-nav-link>
-            <x-nav-link href="/classrooms" :active="request()->is('classrooms')">classrooms</x-nav-link>
+            <x-nav-link href="/students" :active="request()->is('siswa')">Siswa</x-nav-link>
+            <x-nav-link href="/guardians" :active="request()->is('wali-murid')">Wali Murid</x-nav-link>
+            <x-nav-link href="/classrooms" :active="request()->is('kelas')">Kelas</x-nav-link>
+            <x-nav-link href="/subjects" :active="request()->is('mata-pelajaran')">Mata Pelajaran</x-nav-link>
+            <x-nav-link href="/teachers" :active="request()->is('guru')">Guru</x-nav-link>
             </div>
           </div>
         </div>
@@ -64,11 +66,13 @@
       <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
         <x-nav-link-mobile href="/home" :active="request()->is('home')">Home</x-nav-link-mobile>
-         <x-nav-link-mobile href="/profil" :active="request()->is('profil')">profil</x-nav-link-mobile>
-         <x-nav-link-mobile href="/kontak" :active="request()->is('kontak')">kontak</x-nav-link-mobile>
-          <x-nav-link-mobile href="/students" :active="request()->is('students')">students</x-nav-link-mobile>
-          <x-nav-link-mobile href="/guardians" :active="request()->is('guardians')">guardians</x-nav-link-mobile>
-          <x-nav-link-mobile href="/classrooms" :active="request()->is('classrooms')">classrooms</x-nav-link-mobile>
+         <x-nav-link-mobile href="/profil" :active="request()->is('profil')">Profil</x-nav-link-mobile>
+         <x-nav-link-mobile href="/kontak" :active="request()->is('kontak')">Kontak</x-nav-link-mobile>
+          <x-nav-link-mobile href="/students" :active="request()->is('siswa')">Siswa</x-nav-link-mobile>
+          <x-nav-link-mobile href="/guardians" :active="request()->is('wali-murid')">Wali Murid</x-nav-link-mobile>
+          <x-nav-link-mobile href="/classrooms" :active="request()->is('kelas')">Kelas</x-nav-link-mobile>
+          <x-nav-link-mobile href="/subjects" :active="request()->is('mata-pelajaran')">Mata Pelajaran</x-nav-link-mobile>
+          <x-nav-link-mobile href="/teachers" :active="request()->is('guru')">Guru</x-nav-link-mobile>
       </div>
       <div class="border-t border-white/10 pt-4 pb-3">
         <div class="flex items-center px-5">

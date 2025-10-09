@@ -4,7 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Student;
-use App\Models\Guardian; 
+use App\Models\Guardian;
+use App\Models\Subject;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,7 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(10)->create();
         Guardian::factory(10)->create();
-
+         $this->call([
+            SubjectSeeder::class,
+            TeacherSeeder::class,
+        ]);
     
     }
 }
