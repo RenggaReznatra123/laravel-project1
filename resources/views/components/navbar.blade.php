@@ -17,6 +17,7 @@
             <x-nav-link href="/classrooms" :active="request()->is('kelas')">Kelas</x-nav-link>
             <x-nav-link href="/subjects" :active="request()->is('mata-pelajaran')">Mata Pelajaran</x-nav-link>
             <x-nav-link href="/teachers" :active="request()->is('guru')">Guru</x-nav-link>
+            <x-nav-link href="/dashboard" :active="request()->is('dashboard')">Dashboard</x-nav-link>
             </div>
           </div>
         </div>
@@ -73,6 +74,7 @@
           <x-nav-link-mobile href="/classrooms" :active="request()->is('kelas')">Kelas</x-nav-link-mobile>
           <x-nav-link-mobile href="/subjects" :active="request()->is('mata-pelajaran')">Mata Pelajaran</x-nav-link-mobile>
           <x-nav-link-mobile href="/teachers" :active="request()->is('guru')">Guru</x-nav-link-mobile>
+          <x-nav-link-mobile href="/dashboard" :active="request()->is('dashboard')">Dashboard</x-nav-link-mobile>
       </div>
       <div class="border-t border-white/10 pt-4 pb-3">
         <div class="flex items-center px-5">

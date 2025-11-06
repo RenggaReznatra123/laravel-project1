@@ -10,6 +10,7 @@ class Teacher extends Model
 {
     use HasFactory;
 
+
     public function subject()
     {
         return $this->belongsTo(Subject::class);
