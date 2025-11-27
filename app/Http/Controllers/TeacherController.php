@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Teacher;
+use App\Models\Subject; // ✅ tambahkan ini
 
 class TeacherController extends Controller
 {
@@ -14,10 +15,10 @@ class TeacherController extends Controller
     {
         $teachers = Teacher::all();
 
-    return view('teacher', [
-        'title' => "Teacher",
-        'teachers' => $teachers
-    ]);
+        return view('admin.teacher.index', [
+            'title' => "Teacher",
+            'teachers' => $teachers
+        ]);
     }
 
     /**
@@ -25,23 +26,8 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        $subjects = Subject::all(); // ✅ ambil semua mata pelajaran
+        return view('admin.teacher.form', compact('subjects'));
     }
 
     /**
@@ -49,22 +35,10 @@ class TeacherController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $teacher = Teacher::findOrFail($id);
+        $subjects = Subject::all(); // ✅ juga perlu di edit
+        return view('admin.teacher.form', compact('teacher', 'subjects'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    // fungsi lainnya bisa menyusul
 }

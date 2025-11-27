@@ -10,9 +10,21 @@ class Subject extends Model
 {
     use HasFactory;
 
-    // Tambahkan ini biar field bisa dikenali dan aman diisi
-    protected $with = ['teacher'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+    'name',
+    'description',
+];
 
+
+    /**
+     * Relasi ke Teacher (One to One)
+     * Satu mata pelajaran diajar oleh satu guru
+     */
     public function teacher()
     {
         return $this->hasOne(Teacher::class);

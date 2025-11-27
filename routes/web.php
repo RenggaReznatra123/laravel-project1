@@ -1,12 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+// Non-admin controllers (tetap dipakai)
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
+
+// Admin controllers (folder admin)
+use App\Http\Controllers\admin\adminClassroomController;
+use App\Http\Controllers\admin\adminGuardianController;
+use App\Http\Controllers\admin\adminStudentController;
+use App\Http\Controllers\admin\adminSubjectController;
+use App\Http\Controllers\admin\adminTeacherController;
+
+// Models (optional, bisa dipakai di routes closure)
 use App\Models\Student;
 use App\Models\Guardian;
 use App\Models\Classroom;
@@ -23,38 +34,35 @@ Route::get('/home', [ProfilController::class, 'home'])->name('home');
 Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
 
 // -----------------------------
-// 🧩 Bagian Admin
+// 🧩 Bagian Admin (pakai controller di folder admin)
 // -----------------------------
 Route::prefix('admin')->name('admin.')->group(function () {
 
-    // 🧑‍🎓 Data Siswa
-    Route::get('/student', function () {
-    $students = Student::with('classroom')->get();
-    $classrooms = Classroom::all();       // <-- tambahkan ini
-    return view('admin.student.index', compact('students', 'classrooms'));
-})->name('students.index');
+    // Classroom Routes (Hanya Create/Tambah)
+    Route::get('/classroom', [adminClassroomController::class, 'index'])->name('classrooms.index');
+    Route::post('/classroom', [adminClassroomController::class, 'store'])->name('classroom.store');
 
-    // 👨‍👩‍🦱 Data Wali Murid
-    Route::get('/guardian', function () {
-        $guardians = Guardian::all();
-        return view('admin.guardian.index', compact('guardians'));
-    })->name('guardians.index');
+    // Subject Routes (Hanya Create/Tambah)
+    Route::get('/subject', [adminSubjectController::class, 'index'])->name('subject.index');
+    Route::post('/subject/store', [adminSubjectController::class, 'store'])->name('subject.store');
 
-    // 🏫 Data Kelas
-    Route::get('/classroom', function () {
-        $classrooms = Classroom::all();
-        return view('admin.classroom.index', compact('classrooms'));
-    })->name('classrooms.index');
 
-    // 📚 Data Mata Pelajaran
-    Route::get('/subject', function () {
-        $subjects = Subject::all();
-        return view('admin.subject.index', compact('subjects'));
-    })->name('subjects.index');
+    // Teacher Routes (CRUD Lengkap)
+    Route::get('/teacher', [adminTeacherController::class, 'index'])->name('teachers.index');
+    Route::post('/teacher', [adminTeacherController::class, 'store'])->name('teacher.store');
+    Route::put('/teacher/{id}', [adminTeacherController::class, 'update'])->name('teacher.update'   );
+    Route::delete('/teacher/{id}', [adminTeacherController::class, 'destroy'])->name('teacher.destroy');
 
-    // 👨‍🏫 Data Guru
-    Route::get('/teacher', function () {
-        $teachers = Teacher::with('subject')->get();
-        return view('admin.teacher.index', compact('teachers'));
-    })->name('teachers.index');
+    // Guardian Routes (CRUD Lengkap)
+    Route::get('/guardian', [adminGuardianController::class, 'index'])->name('guardians.index');
+    Route::post('/guardian', [adminGuardianController::class, 'store'])->name('guardian.store');
+    Route::put('/guardian/{id}', [adminGuardianController::class, 'update'])->name('guardian.update');
+    Route::delete('/guardian/{id}', [adminGuardianController::class, 'destroy'])->name('guardian.destroy');
+
+    // Student Routes (CRUD Lengkap)
+    Route::get('/student', [adminStudentController::class, 'index'])->name('students.index');
+    Route::post('/student', [adminStudentController::class, 'store'])->name('student.store');
+    Route::put('/student/{id}', [adminStudentController::class, 'update'])->name('student.update');
+    Route::delete('/student/{id}', [adminStudentController::class, 'destroy'])->name('student.destroy');
+
 });
