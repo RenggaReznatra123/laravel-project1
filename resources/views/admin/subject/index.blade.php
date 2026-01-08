@@ -25,8 +25,10 @@
                     <th class="px-4 py-3 text-left text-gray-200">Nama Mata Pelajaran</th>
                     <th class="px-4 py-3 text-left text-gray-200">Deskripsi</th>
                     <th class="px-4 py-3 text-left text-gray-200">Guru Pengajar</th>
+                    <th class="px-4 py-3 text-left text-gray-200">Aksi</th>
                 </tr>
             </thead>
+
             <tbody class="bg-gray-900 divide-y divide-gray-700">
                 @foreach ($subjects as $subject)
                     <tr class="hover:bg-blue-900 transition">
@@ -34,11 +36,21 @@
                         <td class="px-4 py-3">{{ $subject->name }}</td>
                         <td class="px-4 py-3">{{ $subject->description ?? '-' }}</td>
                         <td class="px-4 py-3">{{ $subject->teacher->name ?? '-' }}</td>
+
+                        <td class="px-4 py-3">
+                            <button onclick="openDeleteSubject({{ $subject->id }})"
+                                class="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                                Delete
+                            </button>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
+
+    <!-- INCLUDE DELETE MODAL -->
+    @include('admin.subject.delete_modal')
 
     <!-- MODAL TAMBAH -->
     <div id="modalSubject" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
@@ -50,56 +62,43 @@
             <form action="{{ route('admin.subject.store') }}" method="POST" class="space-y-5">
                 @csrf
 
-                <!-- Nama Mata Pelajaran -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-1">
-                        Nama Mata Pelajaran
-                    </label>
-                    <input type="text" name="name" placeholder="Masukkan nama mata pelajaran" required
-                        class="w-full rounded-lg border-gray-700 bg-gray-800 text-white
-                               focus:ring-blue-500 focus:border-blue-500 p-2" />
+                    <label class="block text-sm font-medium">Nama Mata Pelajaran</label>
+                    <input type="text" name="name" required
+                        class="w-full p-2 rounded-lg bg-gray-800 border border-gray-700">
                 </div>
 
-                <!-- Deskripsi -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-1">
-                        Deskripsi
-                    </label>
-                    <textarea name="description" rows="3" placeholder="Masukkan deskripsi mata pelajaran"
-                        class="w-full rounded-lg border-gray-700 bg-gray-800 text-white
-                               focus:ring-blue-500 focus:border-blue-500 p-2"></textarea>
+                    <label class="block text-sm font-medium">Deskripsi</label>
+                    <textarea name="description" rows="3"
+                        class="w-full p-2 rounded-lg bg-gray-800 border border-gray-700"></textarea>
                 </div>
 
                 <div class="flex justify-end space-x-3">
-                    <button type="button" 
-                        onclick="document.getElementById('modalSubject').classList.add('hidden')"
-                        class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-all duration-200">
-                        Batal
-                    </button>
-                    <button type="submit" 
-                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200">
-                        Simpan
-                    </button>
+                    <button type="button"
+                        onclick="modalSubject.classList.add('hidden')"
+                        class="px-4 py-2 bg-gray-700 rounded-lg">Batal</button>
+
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 rounded-lg">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- SCRIPT -->
     <script>
-        // Modal Tambah
-        const modal = document.getElementById('modalSubject');
-        document.getElementById('openModalSubject').onclick = () => modal.classList.remove('hidden');
-        document.getElementById('closeModalSubject').onclick = () => modal.classList.add('hidden');
+        const modalSubject = document.getElementById('modalSubject');
+        document.getElementById('openModalSubject').onclick = () => modalSubject.classList.remove('hidden');
+        document.getElementById('closeModalSubject').onclick = () => modalSubject.classList.add('hidden');
 
         // Search filter
         document.getElementById('searchSubject').addEventListener('keyup', function () {
             const value = this.value.toLowerCase();
             const rows = document.querySelectorAll('#subjectTable tbody tr');
             rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(value) ? '' : 'none';
+                row.style.display = row.textContent.toLowerCase().includes(value) ? '' : 'none';
             });
         });
     </script>
+
 </x-admin.layout>

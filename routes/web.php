@@ -25,7 +25,7 @@ use App\Models\Subject;
 use App\Models\Teacher;
 
 // -----------------------------
-// 🏠 Halaman Utama & Profil
+// Halaman Utama & Profil
 // -----------------------------
 Route::get('/', [ProfilController::class, 'index'])->name('index');
 Route::get('/profil', [ProfilController::class, 'profil'])->name('profil');
@@ -34,18 +34,19 @@ Route::get('/home', [ProfilController::class, 'home'])->name('home');
 Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
 
 // -----------------------------
-// 🧩 Bagian Admin (pakai controller di folder admin)
+// Bagian Admin (pakai controller di folder admin)
 // -----------------------------
 Route::prefix('admin')->name('admin.')->group(function () {
 
-    // Classroom Routes (Hanya Create/Tambah)
+     // Classroom Routes (Create + Delete)
     Route::get('/classroom', [adminClassroomController::class, 'index'])->name('classrooms.index');
     Route::post('/classroom', [adminClassroomController::class, 'store'])->name('classroom.store');
+    Route::delete('/classroom/{id}', [adminClassroomController::class, 'destroy'])->name('classroom.destroy');
 
-    // Subject Routes (Hanya Create/Tambah)
+    // Subject Routes (Create + Delete)
     Route::get('/subject', [adminSubjectController::class, 'index'])->name('subject.index');
     Route::post('/subject/store', [adminSubjectController::class, 'store'])->name('subject.store');
-
+    Route::delete('/subject/{id}', [adminSubjectController::class, 'destroy'])->name('subject.destroy');
 
     // Teacher Routes (CRUD Lengkap)
     Route::get('/teacher', [adminTeacherController::class, 'index'])->name('teachers.index');

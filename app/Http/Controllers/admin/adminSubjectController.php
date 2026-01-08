@@ -11,32 +11,33 @@ class adminSubjectController extends Controller
     public function index()
     {
         $subjects = Subject::with('teacher')->get();
+
         return view('admin.subject.index', [
             'title' => 'Subject',
             'subjects' => $subjects,
         ]);
     }
 
-    public function create()
+    public function store(Request $request)
     {
-        return view('admin.subject.form');
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        Subject::create($validated);
+
+        return redirect()->route('admin.subject.index')
+            ->with('success', 'Mata pelajaran berhasil ditambahkan');
     }
 
-   public function store(Request $request)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'description' => 'nullable|string',
-    ]);
+    public function destroy($id)
+    {
+        $subject = Subject::findOrFail($id);
 
-    Subject::create($validated);
+        $subject->delete();
 
-    return redirect()->route('admin.subject.index')
-        ->with('success', 'Mata pelajaran berhasil ditambahkan');
-}
-
-
-
-
-    // Edit dan Delete tidak ada karena data berelasi dengan Teacher
+        return redirect()->route('admin.subject.index')
+            ->with('success', 'Mata pelajaran berhasil dihapus');
+    }
 }

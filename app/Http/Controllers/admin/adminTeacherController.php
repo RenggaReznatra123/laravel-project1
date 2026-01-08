@@ -12,7 +12,9 @@ class AdminTeacherController extends Controller
     public function index()
     {
         $teachers = Teacher::with('subject')->get();
-        $subjects = Subject::all();
+
+        // Filter subject: hanya yang belum punya guru
+        $subjects = Subject::whereDoesntHave('teacher')->get();
 
         return view('admin.teacher.index', [
             'title' => 'Teachers',
@@ -21,24 +23,16 @@ class AdminTeacherController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        $subjects = Subject::all();
-        return view('admin.teacher.form', [
-            'subjects' => $subjects
-        ]);
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name'       => 'required|string|max:255',
-            'subject_id' => 'required|exists:subjects,id|unique:teachers,subject_id', // unique validation
+            'subject_id' => 'required|unique:teachers,subject_id',
             'phone'      => 'nullable|string|max:20',
             'email'      => 'required|email|unique:teachers,email',
             'address'    => 'nullable|string|max:255',
         ], [
-            'subject_id.unique' => 'Mata pelajaran ini sudah memiliki guru. Silakan pilih mata pelajaran lain.',
+            'subject_id.unique' => 'Mata pelajaran ini sudah memiliki guru.',
         ]);
 
         Teacher::create($validated);
@@ -49,9 +43,15 @@ class AdminTeacherController extends Controller
     public function edit($id)
     {
         $teacher = Teacher::findOrFail($id);
-        $subjects = Subject::all();
 
-        return view('admin.teacher.form', [
+        // Ambil subject yang belum dipakai guru lain + subject yang sedang digunakan guru ini
+        $subjects = Subject::whereDoesntHave('teacher', function ($q) use ($id) {
+            $q->where('id', '!=', $id);
+        })
+        ->orWhere('id', $teacher->subject_id)
+        ->get();
+
+        return response()->json([
             'teacher' => $teacher,
             'subjects' => $subjects
         ]);
@@ -61,24 +61,21 @@ class AdminTeacherController extends Controller
     {
         $validated = $request->validate([
             'name'       => 'required|string|max:255',
-            'subject_id' => 'required|exists:subjects,id|unique:teachers,subject_id,' . $id,
+            'subject_id' => 'required|unique:teachers,subject_id,' . $id,
             'phone'      => 'nullable|string|max:20',
             'email'      => 'required|email|unique:teachers,email,' . $id,
             'address'    => 'nullable|string|max:255',
-        ], [
-            'subject_id.unique' => 'Mata pelajaran ini sudah memiliki guru lain.',
         ]);
 
         Teacher::findOrFail($id)->update($validated);
 
-        return redirect()->route('admin.teachers.index')->with('success', 'Guru berhasil diupdate!');
+        return redirect()->back()->with('success', 'Guru berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
-        $teacher = Teacher::findOrFail($id);
-        $teacher->delete();
+        Teacher::findOrFail($id)->delete();
 
-        return redirect()->route('admin.teachers.index')->with('success', 'Guru berhasil dihapus!');
+        return redirect()->back()->with('success', 'Guru berhasil dihapus!');
     }
 }
