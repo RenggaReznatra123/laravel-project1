@@ -19,21 +19,32 @@
             </thead>
 
             <tbody class="bg-gray-900 divide-y divide-gray-700">
-                @foreach ($classrooms as $classroom)
+                @forelse ($classrooms as $classroom)
                     <tr class="hover:bg-blue-900 transition">
-                        <td class="px-4 py-3">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-3">{{ ($classrooms->currentPage() - 1) * $classrooms->perPage() + $loop->iteration }}</td>
                         <td class="px-4 py-3">{{ $classroom->name }}</td>
 
                         <td class="px-4 py-3">
-                            <button onclick="openDeleteClassroom({{ $classroom->id }})"
+                            <button onclick="openDeleteClassroom({{ $classroom->id }}, '{{ $classroom->name }}')"
                                 class="px-3 py-1 bg-red-600 rounded-lg hover:bg-red-700">
                                 Delete
                             </button>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="3" class="px-4 py-8 text-center text-gray-400">
+                            Tidak ada data kelas
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
+    </div>
+
+    <!-- Pagination Links -->
+    <div class="mt-6">
+        {{ $classrooms->links() }}
     </div>
 
     @include('admin.classroom.delete_modal')

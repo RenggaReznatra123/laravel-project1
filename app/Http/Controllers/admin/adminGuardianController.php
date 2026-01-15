@@ -8,10 +8,10 @@ use App\Models\Guardian;
 
 class adminGuardianController extends Controller
 {
-    // LIST DATA
     public function index()
     {
-        $guardians = Guardian::latest()->get();
+        
+        $guardians = Guardian::latest()->paginate(10);
         return view('admin.guardian.index', compact('guardians'));
     }
 

@@ -29,9 +29,9 @@
                 </tr>
             </thead>
             <tbody class="bg-gray-900 divide-y divide-gray-700">
-                @foreach ($teachers as $teacher)
+                @forelse ($teachers as $teacher)
                     <tr class="hover:bg-blue-900 transition">
-                        <td class="px-4 py-3">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-3">{{ ($teachers->currentPage() - 1) * $teachers->perPage() + $loop->iteration }}</td>
                         <td class="px-4 py-3">{{ $teacher->name }}</td>
                         <td class="px-4 py-3">{{ $teacher->subject->name ?? '-' }}</td>
                         <td class="px-4 py-3">{{ $teacher->phone }}</td>
@@ -52,9 +52,20 @@
                             </div>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="5" class="px-4 py-8 text-center text-gray-400">
+                            Tidak ada data guru
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
+    </div>
+
+    <!-- Pagination Links -->
+    <div class="mt-6">
+        {{ $teachers->links() }}
     </div>
 
     <!-- MODAL TAMBAH -->

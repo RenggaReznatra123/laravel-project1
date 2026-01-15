@@ -33,9 +33,9 @@
             </thead>
 
             <tbody class="bg-gray-900 divide-y divide-gray-700">
-                @foreach ($guardians as $guardian)
+                @forelse ($guardians as $guardian)
                     <tr class="hover:bg-blue-900 transition">
-                        <td class="px-4 py-3">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-3">{{ ($guardians->currentPage() - 1) * $guardians->perPage() + $loop->iteration }}</td>
                         <td class="px-4 py-3">{{ $guardian->name }}</td>
                         <td class="px-4 py-3">{{ $guardian->phone ?? '-' }}</td>
                         <td class="px-4 py-3">{{ $guardian->job ?? '-' }}</td>
@@ -67,9 +67,20 @@
                             </div>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="6" class="px-4 py-8 text-center text-gray-400">
+                            Tidak ada data wali
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
+    </div>
+
+    <!-- Pagination Links -->
+    <div class="mt-6">
+        {{ $guardians->links() }}
     </div>
 
     <!-- Modal Tambah -->

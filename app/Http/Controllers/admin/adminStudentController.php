@@ -12,7 +12,10 @@ class adminStudentController extends Controller
 {
     public function index()
     {
-        $students = Student::with(['classroom', 'guardian'])->get();
+        // ✅ GUNAKAN PAGINATE
+        $students = Student::with(['classroom', 'guardian'])->paginate(10);
+        
+        // Untuk dropdown tetap pakai all()
         $classrooms = Classroom::all();
         $guardians = Guardian::all();
 

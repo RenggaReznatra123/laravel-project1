@@ -11,7 +11,8 @@ class AdminTeacherController extends Controller
 {
     public function index()
     {
-        $teachers = Teacher::with('subject')->get();
+        // Ubah dari get() ke paginate(10)
+        $teachers = Teacher::with('subject')->paginate(5);
 
         // Filter subject: hanya yang belum punya guru
         $subjects = Subject::whereDoesntHave('teacher')->get();

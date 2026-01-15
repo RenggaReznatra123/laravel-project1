@@ -10,7 +10,8 @@ class adminClassroomController extends Controller
 {
     public function index()
     {
-        $classrooms = Classroom::all();
+        // Ubah dari all() ke paginate(10)
+        $classrooms = Classroom::paginate(10);
 
         return view('admin.classroom.index', [
             'title' => 'Classroom',
@@ -35,7 +36,6 @@ class adminClassroomController extends Controller
     public function destroy($id)
     {
         $classroom = Classroom::findOrFail($id);
-
         $classroom->delete();
 
         return redirect()->route('admin.classrooms.index')
