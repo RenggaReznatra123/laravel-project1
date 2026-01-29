@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Non-admin controllers (tetap dipakai)
+// Controllers
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\GuardianController;
@@ -10,60 +11,70 @@ use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 
-// Admin controllers (folder admin)
+// Admin controllers
 use App\Http\Controllers\admin\adminClassroomController;
 use App\Http\Controllers\admin\adminGuardianController;
 use App\Http\Controllers\admin\adminStudentController;
 use App\Http\Controllers\admin\adminSubjectController;
 use App\Http\Controllers\admin\adminTeacherController;
 
-// Models (optional, bisa dipakai di routes closure)
-use App\Models\Student;
-use App\Models\Guardian;
-use App\Models\Classroom;
-use App\Models\Subject;
-use App\Models\Teacher;
+// -----------------------------
+// Authentication Routes
+// -----------------------------
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // -----------------------------
-// Halaman Utama & Profil
+// Halaman Utama & Profil (Public)
 // -----------------------------
 Route::get('/', [ProfilController::class, 'index'])->name('index');
 Route::get('/profil', [ProfilController::class, 'profil'])->name('profil');
 Route::get('/kontak', [ProfilController::class, 'kontak'])->name('kontak');
 Route::get('/home', [ProfilController::class, 'home'])->name('home');
-Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
 
 // -----------------------------
-// Bagian Admin (pakai controller di folder admin)
+// Public Pages (Non-Admin)
 // -----------------------------
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::get('/students', [StudentController::class, 'index'])->name('students.public');
+Route::get('/guardians', [GuardianController::class, 'index'])->name('guardians.public');
+Route::get('/classrooms', [ClassroomController::class, 'index'])->name('classrooms.public');
+Route::get('/subjects', [SubjectController::class, 'index'])->name('subjects.public');
+Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.public');
 
-     // Classroom Routes (Create + Delete)
+// -----------------------------
+// Admin Routes (Protected by Auth Middleware)
+// -----------------------------
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+
+    // Dashboard
+    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+
+    // Classroom Routes
     Route::get('/classroom', [adminClassroomController::class, 'index'])->name('classrooms.index');
     Route::post('/classroom', [adminClassroomController::class, 'store'])->name('classroom.store');
     Route::delete('/classroom/{id}', [adminClassroomController::class, 'destroy'])->name('classroom.destroy');
 
-    // Subject Routes (Create + Delete)
+    // Subject Routes
     Route::get('/subject', [adminSubjectController::class, 'index'])->name('subject.index');
     Route::post('/subject/store', [adminSubjectController::class, 'store'])->name('subject.store');
     Route::delete('/subject/{id}', [adminSubjectController::class, 'destroy'])->name('subject.destroy');
 
-    // Teacher Routes (CRUD Lengkap)
+    // Teacher Routes
     Route::get('/teacher', [adminTeacherController::class, 'index'])->name('teachers.index');
     Route::post('/teacher', [adminTeacherController::class, 'store'])->name('teacher.store');
-    Route::put('/teacher/{id}', [adminTeacherController::class, 'update'])->name('teacher.update'   );
+    Route::put('/teacher/{id}', [adminTeacherController::class, 'update'])->name('teacher.update');
     Route::delete('/teacher/{id}', [adminTeacherController::class, 'destroy'])->name('teacher.destroy');
 
-    // Guardian Routes (CRUD Lengkap)
+    // Guardian Routes
     Route::get('/guardian', [adminGuardianController::class, 'index'])->name('guardians.index');
     Route::post('/guardian', [adminGuardianController::class, 'store'])->name('guardian.store');
     Route::put('/guardian/{id}', [adminGuardianController::class, 'update'])->name('guardian.update');
     Route::delete('/guardian/{id}', [adminGuardianController::class, 'destroy'])->name('guardian.destroy');
 
-    // Student Routes (CRUD Lengkap)
+    // Student Routes
     Route::get('/student', [adminStudentController::class, 'index'])->name('students.index');
     Route::post('/student', [adminStudentController::class, 'store'])->name('student.store');
     Route::put('/student/{id}', [adminStudentController::class, 'update'])->name('student.update');
     Route::delete('/student/{id}', [adminStudentController::class, 'destroy'])->name('student.destroy');
-
 });
